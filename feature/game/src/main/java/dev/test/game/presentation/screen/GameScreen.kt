@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isSpecified
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.test.design.extension.toRoundShape
 import dev.test.design.theme.TicTacToeTheme
@@ -27,7 +28,7 @@ import dev.test.game.presentation.viewmodel.GameViewModel
 
 @Composable
 fun GameScreen(
-    viewModel: GameViewModel
+    viewModel: GameViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     Content(uiState.value)
@@ -151,7 +152,7 @@ private fun BoardCell(
     )
 }
 
-@Preview(name = "Game screen at start")
+@Preview(name = "Game screen at start", showSystemUi = true)
 @Composable
 private fun GameScreenStartPreview() {
     Content()

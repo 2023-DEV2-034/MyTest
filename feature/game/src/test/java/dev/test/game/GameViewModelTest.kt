@@ -1,4 +1,4 @@
-package dev.test.tictactoe
+package dev.test.game
 
 import dev.test.game.presentation.model.GamePlayer
 import dev.test.game.presentation.viewmodel.GameViewModel
