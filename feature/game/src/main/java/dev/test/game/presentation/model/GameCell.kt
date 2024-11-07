@@ -1,4 +1,4 @@
-package dev.test.tictactoe.presentation.model
+package dev.test.game.presentation.model
 
 /**
  * Enum class to represent each cell on a 3x3 Tic-Tac-Toe board.

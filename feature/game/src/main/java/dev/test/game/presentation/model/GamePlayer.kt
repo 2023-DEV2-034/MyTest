@@ -1,4 +1,4 @@
-package dev.test.tictactoe.presentation.model
+package dev.test.game.presentation.model
 
 /**
  * Enum class to represent the players in a Tic-Tac-Toe game

@@ -1,4 +1,4 @@
-package dev.test.tictactoe.presentation.screen
+package dev.test.game.presentation.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -18,10 +18,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.test.design.theme.TicTacToeTheme
-import dev.test.tictactoe.presentation.contract.GameUiState
-import dev.test.tictactoe.presentation.model.GameCell
-import dev.test.tictactoe.presentation.model.GamePlayer
-import dev.test.tictactoe.presentation.viewmodel.GameViewModel
+import dev.test.game.presentation.contract.GameUiState
+import dev.test.game.presentation.model.GameCell
+import dev.test.game.presentation.model.GamePlayer
+import dev.test.game.presentation.viewmodel.GameViewModel
 
 @Immutable
 data object GameScreen {

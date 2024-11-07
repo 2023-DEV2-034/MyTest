@@ -1,7 +1,7 @@
-package dev.test.tictactoe.presentation.contract
+package dev.test.game.presentation.contract
 
-import dev.test.tictactoe.presentation.model.GameCell
-import dev.test.tictactoe.presentation.model.GamePlayer
+import dev.test.game.presentation.model.GameCell
+import dev.test.game.presentation.model.GamePlayer
 
 /**
  * The UI state of the tic-tac-toe game screen.

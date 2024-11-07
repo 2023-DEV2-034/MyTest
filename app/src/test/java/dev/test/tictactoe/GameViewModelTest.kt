@@ -1,7 +1,7 @@
 package dev.test.tictactoe
 
-import dev.test.tictactoe.presentation.model.GamePlayer
-import dev.test.tictactoe.presentation.viewmodel.GameViewModel
+import dev.test.game.presentation.model.GamePlayer
+import dev.test.game.presentation.viewmodel.GameViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert

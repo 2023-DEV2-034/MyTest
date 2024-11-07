@@ -1,7 +1,7 @@
-package dev.test.tictactoe.presentation.viewmodel
+package dev.test.game.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
-import dev.test.tictactoe.presentation.contract.GameUiState
+import dev.test.game.presentation.contract.GameUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

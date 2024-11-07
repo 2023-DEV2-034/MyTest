@@ -49,7 +49,6 @@ android {
 dependencies {
     // Modules
     implementation(project(":feature:game"))
-    implementation(project(":core:design-system"))
 
     // Compose
     implementation(platform(libs.compose.bom))
@@ -91,4 +90,5 @@ dependencies {
 
     // Miscellaneous
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
 }
