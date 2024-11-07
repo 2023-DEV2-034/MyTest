@@ -47,7 +47,9 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
+    // Modules
+    implementation(project(":feature:game"))
+    implementation(project(":core:design-system"))
 
     // Compose
     implementation(platform(libs.compose.bom))
@@ -86,4 +88,7 @@ dependencies {
 
     // Detekt
     detekt(libs.detekt.cli)
+
+    // Miscellaneous
+    implementation(libs.androidx.core.ktx)
 }

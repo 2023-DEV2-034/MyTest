@@ -1,6 +1,6 @@
 package dev.test.tictactoe
 
-import dev.test.tictactoe.presentation.model.Player
+import dev.test.tictactoe.presentation.model.GamePlayer
 import dev.test.tictactoe.presentation.viewmodel.GameViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -20,7 +20,7 @@ class GameViewModelTest {
     @Test
     fun `when screen starts expect empty board`() = runTest {
         val gameState = gameViewModel.uiState.first()
-        val isBoardEmpty = gameState.board.all { it.value == Player.NONE }
+        val isBoardEmpty = gameState.board.all { it.value == GamePlayer.NONE }
 
         Assert.assertTrue(isBoardEmpty)
     }
