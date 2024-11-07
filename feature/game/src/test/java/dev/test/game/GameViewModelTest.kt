@@ -30,4 +30,10 @@ class GameViewModelTest {
         val gameState = gameViewModel.uiState.first()
         Assert.assertEquals(GamePlayer.X, gameState.currentPlayer)
     }
+
+    @Test
+    fun `when screen starts expect the game to be in progress`() = runTest {
+        val gameState = gameViewModel.uiState.first()
+        Assert.assertEquals(GameStatus.IN_PROGRESS, gameState.gameStatus)
+    }
 }
