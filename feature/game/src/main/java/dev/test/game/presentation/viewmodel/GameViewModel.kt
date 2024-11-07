@@ -8,6 +8,6 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class GameViewModel : ViewModel() {
 
-    private val _uiState = MutableStateFlow(GameUiState())
+    private val _uiState = MutableStateFlow(GameUiState.default)
     val uiState: StateFlow<GameUiState> = _uiState.asStateFlow()
 }
