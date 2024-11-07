@@ -63,6 +63,11 @@ dependencies {
     implementation(libs.lifecycle.runtime.ktx)
     ksp(libs.lifecycle.compiler)
 
+    // Coroutines
+    implementation(platform(libs.kotlinx.coroutines.bom))
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
     // Hilt Injection
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
@@ -76,6 +81,8 @@ dependencies {
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.test.manifest)
     debugImplementation(libs.compose.ui.tooling)
+    testImplementation(platform(libs.kotlinx.coroutines.bom))
+    testImplementation(libs.kotlinx.coroutines.test)
 
     // Detekt
     detekt(libs.detekt.cli)
