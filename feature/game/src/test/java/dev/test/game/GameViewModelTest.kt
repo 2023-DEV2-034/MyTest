@@ -1,6 +1,7 @@
 package dev.test.game
 
 import dev.test.game.presentation.model.GamePlayer
+import dev.test.game.presentation.model.GameStatus
 import dev.test.game.presentation.viewmodel.GameViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
