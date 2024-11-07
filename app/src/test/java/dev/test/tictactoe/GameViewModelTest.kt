@@ -1,5 +1,6 @@
 package dev.test.tictactoe
 
+import dev.test.tictactoe.presentation.viewmodel.GameViewModel
 import org.junit.Before
 import org.junit.Test
 
