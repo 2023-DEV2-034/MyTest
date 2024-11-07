@@ -1,7 +1,9 @@
 package dev.test.game.presentation.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -81,12 +83,27 @@ private fun GameContent(
     uiState: GameUiState,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(
+            space = TicTacToeTheme.dimensions.spacing.SpaceLarge,
+            alignment = Alignment.CenterVertically
+        )
+    ) {
+        val colors = TicTacToeTheme.colors
+
+        // Current player
+        BasicText(
+            text = "Current Player : ${uiState.currentPlayer.name}",
+            style = TicTacToeTheme.typography.H4,
+            color = { colors.textPrimary }
+        )
+
         TicTacToeBoard(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .align(Alignment.Center),
+                .padding(horizontal = 16.dp),
             items = uiState.board,
             spacing = TicTacToeTheme.dimensions.spacing.SpaceSmall,
             itemContent = { _, _ -> BoardCell() }
@@ -152,7 +169,7 @@ private fun BoardCell(
     )
 }
 
-@Preview(name = "Game screen at start", showSystemUi = true)
+@Preview(name = "Game screen at start")
 @Composable
 private fun GameScreenStartPreview() {
     Content()
