@@ -24,4 +24,10 @@ class GameViewModelTest {
 
         Assert.assertTrue(isBoardEmpty)
     }
+
+    @Test
+    fun `when screen starts expect player X to start`() = runTest {
+        val gameState = gameViewModel.uiState.first()
+        Assert.assertEquals(GamePlayer.X, gameState.currentPlayer)
+    }
 }
