@@ -6,6 +6,7 @@ import dev.test.game.presentation.viewmodel.GameViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
+import org.junit.Assume
 import org.junit.Before
 import org.junit.Test
 
@@ -34,6 +35,18 @@ class GameViewModelTest {
 
     @Test
     fun `when screen starts expect the game to be in progress`() = runTest {
+        val gameState = gameViewModel.uiState.first()
+        Assert.assertEquals(GameStatus.IN_PROGRESS, gameState.gameStatus)
+    }
+
+    @Test
+    fun `when a move is played on an empty cell expect it to succeed`() = runTest {
+        // Assume there is at least one empty cell
+        val startState = gameViewModel.uiState.first()
+        val emptyCell = startState.board.entries.find { it.value == GamePlayer.NONE }?.key
+        Assume.assumeNotNull(emptyCell)
+
+        gameViewModel.handleEvent(GameEvent.OnCellClick(emptyCell))
         val gameState = gameViewModel.uiState.first()
         Assert.assertEquals(GameStatus.IN_PROGRESS, gameState.gameStatus)
     }
