@@ -81,7 +81,7 @@ class GameViewModelTest {
     }
 
     @Test
-    fun `when player x plays expect player O to have the next turn`() = runTest {
+    fun `when player X plays expect player O to have the next turn`() = runTest {
         // Assume there is at least one empty cell and player X has the current turn
         val startState = gameViewModel.uiState.first()
         val gameCell = startState.board.entries.find { it.value == GamePlayer.NONE }?.key
@@ -96,19 +96,16 @@ class GameViewModelTest {
 
     @Test
     fun `when player O plays expect player X to have the next turn`() = runTest {
-        // Assume player O has the current turn
+        // Assume player O plays the current turn
         val startState = gameViewModel.uiState.first()
-        val gameCell = startState.board.entries.find { it.value == GamePlayer.NONE }?.key
-        gameViewModel.handleEvent(GameEvent.PlayTurn(gameCell!!)) // X played
-        Assume.assumeTrue(GamePlayer.O == startState.currentPlayer)
+        val firstCell = startState.board.entries.find { it.value == GamePlayer.NONE }?.key
+        gameViewModel.handleEvent(GameEvent.PlayTurn(firstCell!!)) // X played
+        Assume.assumeTrue(GamePlayer.O == gameViewModel.uiState.first().currentPlayer)
 
-        // Assume there is at least one empty cell
-        val emptyCell = startState.board.entries.find { it.value == GamePlayer.NONE }?.key
-        Assume.assumeNotNull(emptyCell)
-
-        // Player X makes his move
-        gameViewModel.handleEvent(GameEvent.PlayTurn(emptyCell!!))
+        // Player O makes his move
         val gameState = gameViewModel.uiState.first()
-        Assert.assertEquals(GamePlayer.X, gameState.currentPlayer)
+        val emptyCell = gameState.board.entries.find { it.value == GamePlayer.NONE }?.key
+        gameViewModel.handleEvent(GameEvent.PlayTurn(emptyCell!!))
+        Assert.assertEquals(GamePlayer.X, gameViewModel.uiState.first().currentPlayer)
     }
 }
