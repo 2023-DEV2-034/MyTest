@@ -1,6 +1,7 @@
 package dev.test.game
 
 import dev.test.game.presentation.contract.GameEvent
+import dev.test.game.presentation.model.GameCell
 import dev.test.game.presentation.model.GamePlayer
 import dev.test.game.presentation.model.GameStatus
 import dev.test.game.presentation.viewmodel.GameViewModel
@@ -107,5 +108,44 @@ class GameViewModelTest {
         val emptyCell = gameState.board.entries.find { it.value == GamePlayer.NONE }?.key
         gameViewModel.handleEvent(GameEvent.PlayTurn(emptyCell!!))
         Assert.assertEquals(GamePlayer.X, gameViewModel.uiState.first().currentPlayer)
+    }
+
+    @Test
+    fun `when player X completes the top row expect X to win`() = runTest {
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C00))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C10))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C01))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C11))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C02))
+
+        // Assert player X won
+        val gameState = gameViewModel.uiState.first()
+        Assert.assertEquals(GameStatus.WINNER.player, GamePlayer.X)
+    }
+
+    @Test
+    fun `when player X completes the left column expect X to win`() = runTest {
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C00))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C01))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C10))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C11))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C20))
+
+        // Assert player X won
+        val gameState = gameViewModel.uiState.first()
+        Assert.assertEquals(GameStatus.WINNER.player, GamePlayer.X)
+    }
+
+    @Test
+    fun `when player X completes diagonally expect X to win`() = runTest {
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C00))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C01))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C11))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C10))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C22))
+
+        // Assert player X won
+        val gameState = gameViewModel.uiState.first()
+        Assert.assertEquals(GameStatus.WINNER.player, GamePlayer.X)
     }
 }
