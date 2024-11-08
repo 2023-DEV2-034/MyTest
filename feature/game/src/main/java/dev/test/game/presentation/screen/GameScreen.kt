@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -18,7 +17,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
@@ -118,7 +116,8 @@ private fun GameContent(
         // Game status
         val statusText = when (uiState.gameStatus) {
             GameStatus.InProgress -> "Player turn : ${uiState.currentPlayer.name}"
-            is GameStatus.Winner -> "PLAYER ${uiState.currentPlayer.name} WINS!"
+            GameStatus.Draw -> "IT'S A DRAWWWW!"
+            is GameStatus.Winner -> "PLAYER ${uiState.currentPlayer.name} WINNNNNNS!"
         }
 
         BasicText(
@@ -144,7 +143,9 @@ private fun GameContent(
             spacing = TicTacToeTheme.dimensions.spacing.SpaceSmall,
             itemContent = { cell, player ->
                 BoardCell(
-                    modifier = Modifier.clickable(uiState.gameStatus is GameStatus.InProgress) {
+                    modifier = Modifier.clickable(
+                        uiState.gameStatus is GameStatus.InProgress
+                    ) {
                         val event = GameEvent.PlayTurn(cell)
                         eventsChannel.trySend(event)
                     },

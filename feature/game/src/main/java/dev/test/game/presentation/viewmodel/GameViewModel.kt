@@ -91,7 +91,9 @@ class GameViewModel @Inject constructor() :
             return GameStatus.Winner(GamePlayer.O)
         }
 
-        return GameStatus.InProgress
+        // It's a draw if the board is full and there's no winner
+        return if (board.none { it.value == GamePlayer.NONE }) GameStatus.Draw
+        else GameStatus.InProgress
     }
 
     private fun generateBitmask(

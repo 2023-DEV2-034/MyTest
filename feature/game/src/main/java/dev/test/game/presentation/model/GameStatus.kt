@@ -6,4 +6,5 @@ package dev.test.game.presentation.model
 sealed class GameStatus {
     data object InProgress : GameStatus()
     data class Winner(val winningPlayer: GamePlayer) : GameStatus()
+    data object Draw : GameStatus()
 }
