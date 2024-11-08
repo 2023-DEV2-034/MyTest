@@ -18,8 +18,11 @@
 
 ## APK
 Here is a URL for a quick test: [APK](./res/app-debug.apk)
+
 ## TESTS
-This is the class that handles the tests
+This is the class that handles the tests:
+https://github.com/2023-DEV2-034/MyTest/blob/main/feature/game/src/test/java/dev/test/game/GameViewModelTest.kt
+
 ## THOUGHT PROCESS
 As TDD was required, I had to think about the test cases before starting the implementation and making technical decisions:
 | TEST CASE | EXPECTED OUTCOME |
@@ -45,15 +48,16 @@ You'll also see a how the same test might have failed twice. First for a compila
 
 To summarize, I respected the 3 rules of TDD, plus I made sure, to keep the tests specific and the implementation generic.
 
-As for the modules, we have the app module
+As for the modules, we have the following: "App", ":feature:game", "core:design-system".
 
 ### Possible improvements
 - Finish the tests as I tested the winning conditions only for the top row, the left column and the main diagonal, and it's just for player "X". I didn't want to spend more time on this as there is enough to judge my approach.
 - Add more tests.
+- More KDoc.
 - In the UI state class, it's more appropriate to have the currentPlayer contained in the GameStatus.InProgress class.
-- This is important and it's mocking the initial state of the tests to isolate the actions done in the test.
+- This is important and it's mocking the initial state of the tests to isolate the tested actions.
 
 Now is this the best code I can provide? It's a big NO as this test doesn't allow me to showcase what I know in terms of clean architecture principles and atomic design, I am a big believer in code quality. Hopefully, my humble implementation would meet your standards, and I would get to discuss the test with you in detail.
-I am also curious about how you deal with TDD.
+I am also curious about how you deal with UI tests in TDD.
 
 Thank you. It was fun!
