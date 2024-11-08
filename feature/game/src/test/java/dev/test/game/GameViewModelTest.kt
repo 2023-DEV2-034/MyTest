@@ -58,4 +58,26 @@ class GameViewModelTest {
             ?.value == currentPlayer
         Assert.assertTrue(isCellPlayed)
     }
+
+    @Test
+    fun `when a move is played on an occupied cell expect it to be ignored`() = runTest {
+        // Assume there is at least one empty cell
+        val startState = gameViewModel.uiState.first()
+        val gameCell = startState.board.entries.find { it.value == GamePlayer.NONE }?.key
+        Assume.assumeNotNull(gameCell)
+
+        // Assume the same cell was played
+        gameViewModel.handleEvent(GameEvent.PlayTurn(gameCell!!))
+        val gameState = gameViewModel.uiState.first()
+        val isCellPlayed = gameState
+            .board
+            .entries
+            .find { it.key == gameCell }
+            ?.value == startState.currentPlayer
+        Assume.assumeTrue(isCellPlayed)
+
+        // Assert that nothing change when the same cell was played again
+        gameViewModel.handleEvent(GameEvent.PlayTurn(gameCell))
+        Assert.assertEquals(gameState, gameViewModel.uiState.first())
+    }
 }
