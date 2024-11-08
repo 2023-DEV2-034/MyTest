@@ -1,5 +1,6 @@
 package dev.test.game
 
+import dev.test.game.presentation.contract.GameEvent
 import dev.test.game.presentation.model.GamePlayer
 import dev.test.game.presentation.model.GameStatus
 import dev.test.game.presentation.viewmodel.GameViewModel
@@ -8,9 +9,13 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Assume
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class GameViewModelTest {
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var gameViewModel: GameViewModel
 
@@ -46,8 +51,11 @@ class GameViewModelTest {
         val emptyCell = startState.board.entries.find { it.value == GamePlayer.NONE }?.key
         Assume.assumeNotNull(emptyCell)
 
-        gameViewModel.handleEvent(GameEvent.OnCellClick(emptyCell))
+        val currentPlayer = startState.currentPlayer
+        gameViewModel.handleEvent(GameEvent.PlayTurn(emptyCell!!))
         val gameState = gameViewModel.uiState.first()
-        Assert.assertEquals(GameStatus.IN_PROGRESS, gameState.gameStatus)
+        val isCellPlayed = gameState.board.entries.find { it.key == emptyCell }
+            ?.value == currentPlayer
+        Assert.assertTrue(isCellPlayed)
     }
 }

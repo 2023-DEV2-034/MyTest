@@ -1,6 +1,7 @@
 package dev.test.game.presentation.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,36 +10,53 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isSpecified
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.coroutineScope
 import dev.test.design.extension.toRoundShape
 import dev.test.design.theme.TicTacToeTheme
+import dev.test.game.presentation.contract.GameEvent
 import dev.test.game.presentation.contract.GameUiState
 import dev.test.game.presentation.model.GameCell
 import dev.test.game.presentation.model.GamePlayer
 import dev.test.game.presentation.viewmodel.GameViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun GameScreen(
     viewModel: GameViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    Content(uiState.value)
+    val eventsChannel = viewModel.attachChannel()
+
+    Content(
+        uiState = uiState.value,
+        eventsChannel = eventsChannel
+    )
 }
 
 @Composable
 private fun Content(
-    uiState: GameUiState = GameUiState.default
+    uiState: GameUiState = GameUiState.default,
+    eventsChannel: Channel<GameEvent> = Channel()
 ) {
     TicTacToeTheme {
         Scaffold(
@@ -52,7 +70,8 @@ private fun Content(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(contentPadding),
-                    uiState = uiState
+                    uiState = uiState,
+                    eventsChannel = eventsChannel
                 )
             }
         )
@@ -81,6 +100,7 @@ private fun GameHeader() {
 @Composable
 private fun GameContent(
     uiState: GameUiState,
+    eventsChannel: Channel<GameEvent>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -97,7 +117,13 @@ private fun GameContent(
         BasicText(
             text = "Current Player : ${uiState.currentPlayer.name}",
             style = TicTacToeTheme.typography.H4,
-            color = { colors.textPrimary }
+            color = {
+                when(uiState.currentPlayer) {
+                    GamePlayer.X -> colors.iconPrimary
+                    GamePlayer.O -> colors.iconSecondary
+                    GamePlayer.NONE -> colors.textPrimary
+                }
+            }
         )
 
         TicTacToeBoard(
@@ -106,7 +132,15 @@ private fun GameContent(
                 .padding(horizontal = 16.dp),
             items = uiState.board,
             spacing = TicTacToeTheme.dimensions.spacing.SpaceSmall,
-            itemContent = { _, _ -> BoardCell() }
+            itemContent = { cell, player ->
+                BoardCell(
+                    modifier = Modifier.clickable {
+                        val event = GameEvent.PlayTurn(cell)
+                        eventsChannel.trySend(event)
+                    },
+                    player = player
+                )
+            }
         )
     }
 }
@@ -159,14 +193,37 @@ private fun TicTacToeBoard(
 
 @Composable
 private fun BoardCell(
+    player: GamePlayer,
     modifier: Modifier = Modifier,
 ) {
+    // Use colors to differentiate players
+    val color = when(player) {
+        GamePlayer.X -> TicTacToeTheme.colors.iconPrimary
+        GamePlayer.O -> TicTacToeTheme.colors.iconSecondary
+        GamePlayer.NONE -> TicTacToeTheme.colors.surfaceSecondary
+    }
+
     Spacer(
         modifier = modifier.background(
-            color = TicTacToeTheme.colors.surfaceSecondary,
+            color = color,
             shape = TicTacToeTheme.dimensions.cornerRadius.R8.toRoundShape
         )
     )
+}
+
+@Composable
+private fun GameViewModel.attachChannel(): Channel<GameEvent> {
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val eventsChannel = remember { Channel<GameEvent>() }
+
+    LaunchedEffect(key1 = lifecycle) {
+        eventsChannel
+            .consumeAsFlow()
+            .onEach { event -> handleEvent(event) }
+            .launchIn(lifecycle.coroutineScope)
+    }
+
+    return eventsChannel
 }
 
 @Preview(name = "Game screen at start")
