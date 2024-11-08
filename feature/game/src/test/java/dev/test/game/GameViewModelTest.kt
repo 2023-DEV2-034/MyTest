@@ -154,4 +154,21 @@ class GameViewModelTest {
         val winningPlayer = (gameState.gameStatus as GameStatus.Winner).winningPlayer
         Assert.assertEquals(GamePlayer.X, winningPlayer)
     }
+
+    @Test
+    fun `when the board is not empty and nobody won expect a draw`() = runTest {
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C00))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C10))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C01))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C11))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C12))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C02))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C20))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C21))
+        gameViewModel.handleEvent(GameEvent.PlayTurn(GameCell.C22))
+
+        // Assert a draw
+        val gameState = gameViewModel.uiState.first()
+        Assert.assertTrue(gameState.gameStatus is GameStatus.Draw)
+    }
 }
