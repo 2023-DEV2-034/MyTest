@@ -42,7 +42,7 @@ class GameViewModelTest {
     @Test
     fun `when screen starts expect the game to be in progress`() = runTest {
         val gameState = gameViewModel.uiState.first()
-        Assert.assertEquals(GameStatus.IN_PROGRESS, gameState.gameStatus)
+        Assert.assertTrue(gameState.gameStatus is GameStatus.InProgress)
     }
 
     @Test
@@ -120,7 +120,9 @@ class GameViewModelTest {
 
         // Assert player X won
         val gameState = gameViewModel.uiState.first()
-        Assert.assertEquals(GameStatus.WINNER.player, GamePlayer.X)
+        Assert.assertTrue(gameState.gameStatus is GameStatus.Winner)
+        val winningPlayer = (gameState.gameStatus as GameStatus.Winner).winningPlayer
+        Assert.assertEquals(GamePlayer.X, winningPlayer)
     }
 
     @Test
@@ -133,7 +135,9 @@ class GameViewModelTest {
 
         // Assert player X won
         val gameState = gameViewModel.uiState.first()
-        Assert.assertEquals(GameStatus.WINNER.player, GamePlayer.X)
+        Assert.assertTrue(gameState.gameStatus is GameStatus.Winner)
+        val winningPlayer = (gameState.gameStatus as GameStatus.Winner).winningPlayer
+        Assert.assertEquals(GamePlayer.X, winningPlayer)
     }
 
     @Test
@@ -146,6 +150,8 @@ class GameViewModelTest {
 
         // Assert player X won
         val gameState = gameViewModel.uiState.first()
-        Assert.assertEquals(GameStatus.WINNER.player, GamePlayer.X)
+        Assert.assertTrue(gameState.gameStatus is GameStatus.Winner)
+        val winningPlayer = (gameState.gameStatus as GameStatus.Winner).winningPlayer
+        Assert.assertEquals(GamePlayer.X, winningPlayer)
     }
 }

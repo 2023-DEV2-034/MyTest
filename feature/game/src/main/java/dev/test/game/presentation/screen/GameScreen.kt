@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -34,6 +35,7 @@ import dev.test.game.presentation.contract.GameEvent
 import dev.test.game.presentation.contract.GameUiState
 import dev.test.game.presentation.model.GameCell
 import dev.test.game.presentation.model.GamePlayer
+import dev.test.game.presentation.model.GameStatus
 import dev.test.game.presentation.viewmodel.GameViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -113,12 +115,17 @@ private fun GameContent(
     ) {
         val colors = TicTacToeTheme.colors
 
-        // Current player
+        // Game status
+        val statusText = when (uiState.gameStatus) {
+            GameStatus.InProgress -> "Player turn : ${uiState.currentPlayer.name}"
+            is GameStatus.Winner -> "PLAYER ${uiState.currentPlayer.name} WINS!"
+        }
+
         BasicText(
-            text = "Current Player : ${uiState.currentPlayer.name}",
+            text = statusText,
             style = TicTacToeTheme.typography.H4,
             color = {
-                when(uiState.currentPlayer) {
+                when (uiState.currentPlayer) {
                     GamePlayer.X -> colors.iconPrimary
                     GamePlayer.O -> colors.iconSecondary
                     GamePlayer.NONE -> colors.textPrimary
@@ -129,12 +136,15 @@ private fun GameContent(
         TicTacToeBoard(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .graphicsLayer {
+                    alpha = if (uiState.gameStatus is GameStatus.InProgress) 1.0f else .2f
+                },
             items = uiState.board,
             spacing = TicTacToeTheme.dimensions.spacing.SpaceSmall,
             itemContent = { cell, player ->
                 BoardCell(
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(uiState.gameStatus is GameStatus.InProgress) {
                         val event = GameEvent.PlayTurn(cell)
                         eventsChannel.trySend(event)
                     },
@@ -197,7 +207,7 @@ private fun BoardCell(
     modifier: Modifier = Modifier,
 ) {
     // Use colors to differentiate players
-    val color = when(player) {
+    val color = when (player) {
         GamePlayer.X -> TicTacToeTheme.colors.iconPrimary
         GamePlayer.O -> TicTacToeTheme.colors.iconSecondary
         GamePlayer.NONE -> TicTacToeTheme.colors.surfaceSecondary

@@ -20,7 +20,7 @@ data class GameUiState(
         val default = GameUiState(
             board = GameCell.entries.associateWith { GamePlayer.NONE },
             currentPlayer = GamePlayer.X,
-            gameStatus = GameStatus.IN_PROGRESS,
+            gameStatus = GameStatus.InProgress,
         )
     }
 }
